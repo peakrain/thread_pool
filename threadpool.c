@@ -9,7 +9,7 @@ void *thread_function(void *arg)
 		pthread_mutex_lock(&pool->p_lock);
 		while(isempty(pool->task))
 			pthread_cond_wait(&pool->p_ready,&pool->p_lock);
-		struct task *t=getFront(pool->task);
+		struct task *t=(struct task*)getFront(pool->task);
 		Queue_dequeue(pool->task);
 		(*(t->routine))(t->arg);
 		pthread_mutex_unlock(&pool->p_lock);
@@ -36,11 +36,23 @@ thread_pool_t thread_pool_create(int n)
 void thread_pool_add_task(thread_pool_t pool,void *(*routine)(void *arg),void *arg)
 {
 	pthread_mutex_lock(&pool->p_lock);
-	struct task *t;
+	struct task *t=(struct task*)malloc(sizeof(struct task));
 	t->routine=routine;
 	t->arg=arg;
 	Queue_enqueue(pool->task,t);
 	pthread_cond_signal(&pool->p_ready);
 	pthread_mutex_unlock(&pool->p_lock);
 
+}
+
+void thread_pool_destroy(thread_pool_t pool)
+{
+	int i;
+	for(i=0;i<pool->thread_count;i++)
+		pthread_join(pool->threads[i],NULL);
+	pthread_mutex_destroy(&pool->p_lock);
+	pthread_cond_destroy(&pool->p_ready);
+	Queue_destroy(pool->task);
+	free(pool->threads);
+	free(pool);
 }

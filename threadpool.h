@@ -19,4 +19,5 @@ struct thread_pool{
 typedef struct thread_pool *thread_pool_t;
 thread_pool_t thread_pool_create(int n);
 void thread_pool_add_task(thread_pool_t pool,void *(*routine)(void *arg),void *arg);
+void thread_pool_destroy(thread_pool_t pool);
 #endif

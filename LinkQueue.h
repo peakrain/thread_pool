@@ -21,6 +21,6 @@ void Queue_dequeue(queue_t q);
 int Queue_length(queue_t q);
 void *getFront(queue_t Q);
 int isempty(queue_t q);
-void Queue_destory(queue_t q);
+void Queue_destroy(queue_t q);
 
 #endif

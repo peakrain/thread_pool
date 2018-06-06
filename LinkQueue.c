@@ -62,7 +62,7 @@ int isempty(queue_t Q)
 		return false;
 }
 
-void Queue_destory(queue_t Q)
+void Queue_destroy(queue_t Q)
 {
 	free(Q);
 }

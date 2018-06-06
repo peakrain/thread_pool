@@ -9,8 +9,9 @@ int main()
 {
 	int i;
 	thread_pool_t pool;
-	pool=thread_pool_create(10);
+	pool=thread_pool_create(5);
 	for(i=0;i<5;i++)
 		thread_pool_add_task(pool,test,(void*)i);
+	thread_pool_destroy(pool);
 	return 0;
 }
