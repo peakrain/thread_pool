@@ -10,9 +10,13 @@ struct task{
 };
 struct thread_pool{
 	int thread_count;
+	int live_num;
+	int task_num;
 	queue_t task;
+	pthread_t info_id;
 	pthread_t *threads;
 	pthread_mutex_t p_lock;
+	pthread_rwlock_t lock;
 	pthread_cond_t p_ready;	
 };
 
