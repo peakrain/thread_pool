@@ -4,20 +4,30 @@
 #include"LinkQueue.h"
 #include<pthread.h>
 
+struct task_info{
+	int total;
+	int processing;
+	int waiting;
+	int finished;
+};
+struct thread_info{
+	int total;
+	int used;
+	int free;
+};
 struct task{
 	void *(*routine)(void *arg);
 	void *arg;
 };
 struct thread_pool{
-	int thread_count;
-	int live_num;
-	int task_num;
 	queue_t task;
+	struct task_info task_info;
+	struct thread_info thread_info;
 	pthread_t info_id;
 	pthread_t *threads;
-	pthread_mutex_t p_lock;
-	pthread_rwlock_t lock;
-	pthread_cond_t p_ready;	
+	pthread_mutex_t task_lock;
+	pthread_rwlock_t rw_lock;
+	pthread_cond_t task_ready;	
 };
 
 typedef struct thread_pool *thread_pool_t;
